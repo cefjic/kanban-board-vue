@@ -1,28 +1,63 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <b-navbar variant="light">
+      <b-navbar-brand href="#"><SomeIcon />{{ $t("appTitle") }}</b-navbar-brand>
+
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item-dropdown v-bind:text="$t('language')" right>
+            <b-dropdown-item href="#" v-on:click="changeLanguage('en')">
+              EN
+            </b-dropdown-item>
+            <b-dropdown-item href="#" v-on:click="changeLanguage('fr')">
+              FR
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+    <Board />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SomeIcon from "./assets/logo.svg";
+import Board from "./components/Board";
+import { i18n, messages } from "./main";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  components: { SomeIcon, Board },
+  methods: {
+    changeLanguage(key) {
+      i18n.locale = Object.keys(messages).includes(key) ? key : "fr";
+    },
+    updateTitle() {
+      document.title = i18n.t("appTitle");
+    },
+  },
+  mounted() {
+    this.updateTitle();
+  },
+  updated() {
+    this.updateTitle();
+  },
+};
 </script>
 
-<style>
+<style lang="scss" scoped>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background: #e3e3e3;
+  min-height: 100vh;
+}
+
+nav svg {
+  width: 30px;
+  height: 30px;
+  vertical-align: top;
+  margin-right: 12px;
 }
 </style>
