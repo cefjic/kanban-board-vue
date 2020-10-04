@@ -30,12 +30,18 @@ export default {
     onSubmit(e) {
       onSubmitBlur(e);
     },
+    onFocus() {
+      const input = this.$refs.taskInput;
+      if (input) {
+        input.focus();
+      }
+    },
+  },
+  mounted() {
+    this.onFocus();
   },
   updated() {
-    const input = this.$refs.taskInput;
-    if (input) {
-      input.focus();
-    }
+    this.onFocus();
   },
 };
 </script>
