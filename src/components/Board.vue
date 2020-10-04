@@ -15,8 +15,7 @@
             class="list-group-flush"
             tag="b-card-body"
             v-model="tabs.tab"
-            v-bind="dragOptions"
-            :isEditable="tab.isProtected"
+            v-bind="{ ...dragOptions, disabled: tab.isProtected }"
             @start="isDragging = true"
             @end="onMoveEnd"
           >
@@ -82,7 +81,6 @@ export default {
   name: "Board",
   data: () => ({
     tabs: [],
-    editable: true,
     isDragging: false,
     delayedDragging: false,
   }),
@@ -108,7 +106,7 @@ export default {
       return {
         animation: 0,
         group: "description",
-        disabled: !this.editable,
+        disabled: false,
         ghostClass: "ghost",
       };
     },
