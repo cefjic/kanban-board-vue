@@ -1,4 +1,11 @@
 {
+  "addTab": "Ajouter une liste | Ajouter une autre liste",
+  "addTask": "Ajouter une tâche | Ajouter une autre tâche",
   "appTitle": "Tableau kanban",
-  "language": "Langue"
+  "clean": "Vider la liste",
+  "delete": "Supprimer",
+  "language": "Langue",
+  "move": "Déplacer",
+  "protect": "Protéger",
+  "unprotect": "Ne plus protéger"
 }

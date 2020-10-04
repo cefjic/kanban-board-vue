@@ -6,10 +6,10 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
           <b-nav-item-dropdown v-bind:text="$t('language')" right>
-            <b-dropdown-item href="#" v-on:click="changeLanguage('en')">
+            <b-dropdown-item href="#" @click="changeLanguage('en')">
               EN
             </b-dropdown-item>
-            <b-dropdown-item href="#" v-on:click="changeLanguage('fr')">
+            <b-dropdown-item href="#" @click="changeLanguage('fr')">
               FR
             </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -52,6 +52,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   background: #e3e3e3;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 nav svg {
