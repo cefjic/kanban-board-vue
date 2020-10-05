@@ -5,7 +5,10 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown v-bind:text="$t('language')" right>
+          <b-nav-item-dropdown
+            v-bind:text="$t($i18n.locale.toUpperCase())"
+            right
+          >
             <b-dropdown-item href="#" @click="changeLanguage('en')">
               EN
             </b-dropdown-item>
@@ -24,6 +27,7 @@
 import SomeIcon from "./assets/logo.svg";
 import Board from "./components/Board";
 import { i18n, messages } from "./main";
+import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
   name: "App",
@@ -34,6 +38,12 @@ export default {
     },
     updateTitle() {
       document.title = i18n.t("appTitle");
+    },
+  },
+  validation: {
+    name: {
+      required,
+      minLength: minLength(2),
     },
   },
   mounted() {

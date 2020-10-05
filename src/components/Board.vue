@@ -4,23 +4,28 @@
       <div v-for="tab in tabs" :key="tab.id" class="list-wrapper">
         <b-card
           no-body
-          :bg-variant="tab.isOverflowed ? 'danger' : 'default'"
-          :text-variant="tab.isOverflowed ? 'white' : 'dark'"
-          :header="tab.isOverflowed ? 'danger' : 'default'"
+          :bg-variant="isOverflowed(tab) ? 'danger' : 'default'"
+          :text-variant="isOverflowed(tab) ? 'white' : 'dark'"
+          :header="isOverflowed(tab) ? 'danger' : 'default'"
         >
           <template v-slot:header>
-            <CardHeader :tab="tab" :removeTab="removeTab" />
+            <CardHeader
+              :tab="tab"
+              :removeTab="removeTab"
+              :onUpdate="saveLocalStorage"
+            />
           </template>
           <draggable
             class="list-group-flush"
             tag="b-card-body"
             v-model="tabs.tab"
             v-bind="{ ...dragOptions, disabled: tab.isProtected }"
+            :move="onMove"
             @start="isDragging = true"
-            @end="onMoveEnd"
+            @end="isDragging = false"
           >
             <div v-for="task in tab.tasks" :key="task.id" class="task-wrapper">
-              <TaskCard :tab="tab" :task="task" />
+              <TaskCard :tab="tab" :task="task" :onUpdate="saveLocalStorage" />
             </div>
           </draggable>
           <b-card-body>
@@ -37,63 +42,69 @@
         }}</b-button>
       </div>
     </div>
+    <div class="debug">{{ listString }}</div>
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
-import uniqid from "uniqid";
 import CardHeader from "./CardHeader";
 import TaskCard from "./TaskCard";
+import { LOCAL_STORAGE_TABS, Task, Tab } from "../utils";
 
-function Task(name, focus = false) {
-  this.name = name;
-  this.focus = focus;
-  this.id = uniqid();
-}
+const getExistingTasks = (tasks) =>
+  tasks.map(({ name, id, desc }) => new Task({ name, id, desc }));
 
-function Tab(name, order, tasks = [], focus = false) {
-  this.name = name;
-  this.order = order;
-  this.tasks = tasks;
-  this.id = uniqid();
-  this.focus = focus;
-  this.isProtected = false;
-  this.isOverflowed = false;
-  this.refreshOverflow = () => {
-    this.isOverflowed = this.tasks.length > 5;
-  };
-  this.addTask = (taskName) => {
-    this.tasks = [...this.tasks, new Task(taskName, true)];
-    this.refreshOverflow();
-  };
-  this.removeTask = (taskId) => {
-    this.tasks = this.tasks.filter((task) => task.id !== taskId);
-    this.refreshOverflow();
-  };
-  this.clean = () => {
-    this.tasks = [];
-    this.refreshOverflow();
-  };
-}
+const getExistingTabs = () => {
+  const existingTabs = localStorage.getItem(LOCAL_STORAGE_TABS);
+  const savedTabs = existingTabs ? JSON.parse(existingTabs) : [];
+  return savedTabs.map(
+    ({ name, tasks, order, id, isProtected }) =>
+      new Tab({
+        name,
+        order,
+        tasks: getExistingTasks(tasks),
+        isProtected,
+        id,
+      })
+  );
+};
 
 export default {
   name: "Board",
-  data: () => ({
-    tabs: [],
-    isDragging: false,
-    delayedDragging: false,
-  }),
+  data() {
+    return {
+      tabs: getExistingTabs(),
+      isDragging: false,
+      delayedDragging: false,
+    };
+  },
   methods: {
     removeTab(id) {
       this.tabs = this.tabs.filter((tab) => tab.id !== id);
     },
     addTab() {
-      const newTab = new Tab("", this.tabs.length, [], true);
+      const newTab = new Tab({
+        name: "",
+        order: this.tabs.length,
+        focus: true,
+      });
       this.tabs = [...this.tabs, newTab];
     },
-    onMoveEnd() {
-      this.isDragging = false;
+    isOverflowed(tab) {
+      return tab.tasks.length > 5;
+    },
+    saveLocalStorage() {
+      console.log("update local storage");
+      localStorage.setItem(LOCAL_STORAGE_TABS, JSON.stringify(this.tabs));
+    },
+    onMove({ relatedContext, draggedContext }) {
+      console.log("move");
+      const relatedElement = relatedContext.element;
+      const draggedElement = draggedContext.element;
+      return (
+        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+      );
     },
   },
   components: {
@@ -110,11 +121,28 @@ export default {
         ghostClass: "ghost",
       };
     },
+    listString() {
+      return JSON.stringify(this.tabs, null, 2);
+    },
+  },
+  updated() {
+    this.saveLocalStorage();
+  },
+  watch: {
+    isDragging(newValue) {
+      if (newValue) {
+        this.delayedDragging = true;
+        return;
+      }
+      this.$nextTick(() => {
+        this.delayedDragging = false;
+      });
+    },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .layout {
   position: relative;
   flex: 1;
@@ -167,5 +195,11 @@ export default {
   & + & {
     margin-top: 8px;
   }
+}
+.debug {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 </style>

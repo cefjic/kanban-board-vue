@@ -1,23 +1,31 @@
 <template>
   <form v-if="tab.focus" @submit="onSubmit">
-    <b-form-input v-model="tab.name" @blur="onTabBlur(tab)" ref="tabInput" />
+    <input
+      v-model="tab.name"
+      @blur="onTabBlur(tab)"
+      ref="tabInput"
+      class="custom-input"
+    />
   </form>
   <div class="card-top" v-else>
-    <h6 class="mb-0 mr-1" @click="tab.focus = true" :title="tab.name">
+    <span class="tab-title" @click="tab.focus = true" :title="tab.name">
       {{ tab.name }}
-    </h6>
-    <b-badge :variant="tab.isOverflowed ? 'danger' : 'secondary'"
-      >{{ tab.tasks.length }}/5</b-badge
+    </span>
+    <b-badge :variant="isOverflowed ? 'danger' : 'secondary'"
+      >{{ nbTasks }}/5</b-badge
     >
     <b-icon icon="lock-fill" v-if="tab.isProtected" aria-hidden="true"></b-icon>
-    <b-dropdown size="sm" variant="light" text="...">
+    <b-dropdown size="sm" variant="light">
+      <template v-slot:button-content>
+        <b-icon icon="three-dots" aria-hidden="true"></b-icon>
+      </template>
       <b-dropdown-item @click="tab.isProtected = !tab.isProtected">{{
         $t(tab.isProtected ? "unprotect" : "protect")
       }}</b-dropdown-item>
       <b-dropdown-item @click="removeTab(tab.id)">{{
         $t("delete")
       }}</b-dropdown-item>
-      <b-dropdown-item v-if="tab.tasks.length > 0" @click="tab.clean()">{{
+      <b-dropdown-item v-if="nbTasks > 0" @click="tab.clean()">{{
         $t("clean")
       }}</b-dropdown-item>
     </b-dropdown>
@@ -29,7 +37,7 @@ import { onSubmitBlur } from "../utils";
 
 export default {
   name: "CardHeader",
-  props: ["tab", "removeTab"],
+  props: ["tab", "removeTab", "onUpdate"],
   methods: {
     onTabBlur(tab) {
       if (!tab.name) {
@@ -48,35 +56,56 @@ export default {
       onSubmitBlur(e);
     },
   },
+  computed: {
+    isOverflowed() {
+      return this.tab.tasks.length > 5;
+    },
+    nbTasks() {
+      return this.tab.tasks.length;
+    },
+  },
   mounted() {
     this.onFocus();
   },
   updated() {
     this.onFocus();
-    console.log("updated");
+    this.onUpdate();
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .card-top {
   display: flex;
   align-items: center;
+  padding: 2px 0;
 }
-h6 {
-  padding: 10px 0 9px;
+.tab-title {
   flex: 1;
   display: flex;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   display: block;
+  padding-left: 10px;
+  font-weight: bold;
 }
 .dropdown {
   margin-left: 4px;
 
-  ::after {
-    display: none;
+  .dropdown-toggle {
+    display: flex;
+
+    &::after {
+      display: none;
+    }
   }
+}
+.custom-input {
+  background: white;
+  width: 100%;
+  border-radius: 0.25rem;
+  padding: 2px 8px;
+  font-weight: bold;
 }
 </style>
