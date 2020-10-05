@@ -1,5 +1,10 @@
 <template>
-  <b-card class="task-card" text-variant="dark" @click="showModal" no-body>
+  <b-card
+    class="task-card"
+    text-variant="dark"
+    @click="isModalOpen = !isModalOpen"
+    no-body
+  >
     <template v-slot:header>
       <form v-if="task.focus" @submit="onSubmit">
         <input
@@ -13,7 +18,7 @@
       <b-card-text class="text-line" v-else>
         {{ task.name }}
       </b-card-text>
-      <b-modal :ref="`ref-${task.id}`" @hidden="hideModal">
+      <b-modal v-model="isModalOpen" @hidden="hideModal" @show="showModal">
         <template v-slot:modal-title>
           <form @submit="onSubmit">
             <b-input
@@ -57,7 +62,10 @@ import { required } from "vuelidate/lib/validators";
 export default {
   name: "TaskCard",
   data() {
-    return { originTaskName: "" };
+    return {
+      isModalOpen: false,
+      originTaskName: "",
+    };
   },
   props: ["tab", "task"],
   validations: {
@@ -89,15 +97,11 @@ export default {
     },
     showModal() {
       this.originTaskName = this.task.name;
-      if (!this.task.focus) {
-        this.$refs[`ref-${this.task.id}`].show();
-      }
     },
     hideModal() {
       if (!this.$v.task.name.required) {
         this.task.name = this.originTaskName;
       }
-      this.$refs[`ref-${this.task.id}`].hide();
     },
   },
   mounted() {
