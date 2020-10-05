@@ -40,19 +40,23 @@ export function Tab({
 }
 
 const getExistingTasks = (tasks) =>
-  tasks.map(({ name, id, desc }) => new Task({ name, id, desc }));
+  tasks
+    .map(({ name, id, desc }) => new Task({ name, id, desc }))
+    .filter(({ name }) => !!name);
 
 export const getExistingTabs = () => {
   const existingTabs = localStorage.getItem(LOCAL_STORAGE_TABS);
   const savedTabs = existingTabs ? JSON.parse(existingTabs) : [];
-  return savedTabs.map(
-    ({ name, tasks, order, id, isProtected }) =>
-      new Tab({
-        name,
-        order,
-        tasks: getExistingTasks(tasks),
-        isProtected,
-        id,
-      })
-  );
+  return savedTabs
+    .map(
+      ({ name, tasks, order, id, isProtected }) =>
+        new Tab({
+          name,
+          order,
+          tasks: getExistingTasks(tasks),
+          isProtected,
+          id,
+        })
+    )
+    .filter(({ name }) => !!name);
 };

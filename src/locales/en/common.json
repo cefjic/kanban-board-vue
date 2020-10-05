@@ -1,4 +1,14 @@
 {
+  "addTab": "Add a list | Add an orther list",
+  "addTask": "Add a task | Add an other task",
   "appTitle": "Kanban board",
-  "language": "Language"
+  "clean": "Clean",
+  "close": "Close",
+  "delete": "Delete",
+  "description": "Description",
+  "language": "Language",
+  "name": "Name",
+  "protect": "Protect",
+  "protected": "Protected",
+  "unprotect": "Unprotect"
 }

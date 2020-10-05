@@ -21,11 +21,15 @@
               @blur="onTitleBlur(task)"
               id="title-modal-input"
               :state="$v.task.name.required"
+              :placeholder="$t('name')"
             />
           </form>
         </template>
         <div class="d-block">
-          <b-textarea v-model="task.desc"></b-textarea>
+          <b-textarea
+            v-model="task.desc"
+            :placeholder="$t('description')"
+          ></b-textarea>
         </div>
         <template v-slot:modal-footer>
           <div class="button-wrapper">

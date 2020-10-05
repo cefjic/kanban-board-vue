@@ -5,8 +5,9 @@
   "clean": "Vider la liste",
   "close": "Fermer",
   "delete": "Supprimer",
+  "description": "Description",
   "language": "Langue",
-  "move": "Déplacer",
+  "name": "Nom",
   "protect": "Protéger",
   "protected": "Protégé",
   "unprotect": "Ne plus protéger"
