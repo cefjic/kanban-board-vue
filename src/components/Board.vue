@@ -15,19 +15,7 @@
               :onUpdate="saveLocalStorage"
             />
           </template>
-          <draggable
-            class="list-group-flush"
-            tag="b-card-body"
-            v-model="tabs.tab"
-            v-bind="{ ...dragOptions, disabled: tab.isProtected }"
-            :move="onMove"
-            @start="isDragging = true"
-            @end="isDragging = false"
-          >
-            <div v-for="task in tab.tasks" :key="task.id" class="task-wrapper">
-              <TaskCard :tab="tab" :task="task" :onUpdate="saveLocalStorage" />
-            </div>
-          </draggable>
+          <TabList :tab="tab" :onUpdate="saveLocalStorage" />
           <b-card-body>
             <a href="#" class="card-link" @click="tab.addTask('')">
               <b-icon icon="plus" aria-hidden="true"></b-icon>
@@ -47,9 +35,8 @@
 </template>
 
 <script>
-import draggable from "vuedraggable";
 import CardHeader from "./CardHeader";
-import TaskCard from "./TaskCard";
+import TabList from "./TabList";
 import { LOCAL_STORAGE_TABS, Task, Tab } from "../utils";
 
 const getExistingTasks = (tasks) =>
@@ -75,8 +62,6 @@ export default {
   data() {
     return {
       tabs: getExistingTabs(),
-      isDragging: false,
-      delayedDragging: false,
     };
   },
   methods: {
@@ -98,46 +83,18 @@ export default {
       console.log("update local storage");
       localStorage.setItem(LOCAL_STORAGE_TABS, JSON.stringify(this.tabs));
     },
-    onMove({ relatedContext, draggedContext }) {
-      console.log("move");
-      const relatedElement = relatedContext.element;
-      const draggedElement = draggedContext.element;
-      return (
-        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-      );
-    },
   },
   components: {
-    draggable,
     CardHeader,
-    TaskCard,
+    TabList,
   },
   computed: {
-    dragOptions() {
-      return {
-        animation: 0,
-        group: "description",
-        disabled: false,
-        ghostClass: "ghost",
-      };
-    },
     listString() {
       return JSON.stringify(this.tabs, null, 2);
     },
   },
   updated() {
     this.saveLocalStorage();
-  },
-  watch: {
-    isDragging(newValue) {
-      if (newValue) {
-        this.delayedDragging = true;
-        return;
-      }
-      this.$nextTick(() => {
-        this.delayedDragging = false;
-      });
-    },
   },
 };
 </script>
