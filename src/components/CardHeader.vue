@@ -1,11 +1,13 @@
 <template>
   <form v-if="tab.focus" @submit="onSubmit">
     <input
-      v-model="tab.name"
+      v-model="$v.tab.name.$model"
       @blur="onTabBlur(tab)"
       ref="tabInput"
       class="custom-input"
+      :aria-invalid="!this.isNewTab && !$v.tab.name.required"
     />
+    <div class="background"></div>
   </form>
   <div class="card-top" v-else>
     <span class="tab-title" @click="tab.focus = true" :title="tab.name">
@@ -14,7 +16,13 @@
     <b-badge :variant="isOverflowed ? 'danger' : 'secondary'"
       >{{ nbTasks }}/5</b-badge
     >
-    <b-icon icon="lock-fill" v-if="tab.isProtected" aria-hidden="true"></b-icon>
+    <span v-b-tooltip.hover :title="$t('protected')" class="ml-1">
+      <b-icon
+        icon="lock-fill"
+        v-if="tab.isProtected"
+        aria-hidden="true"
+      ></b-icon>
+    </span>
     <b-dropdown size="sm" variant="light">
       <template v-slot:button-content>
         <b-icon icon="three-dots" aria-hidden="true"></b-icon>
@@ -34,15 +42,24 @@
 
 <script>
 import { onSubmitBlur } from "../utils";
+import { required } from "vuelidate/lib/validators";
 
 export default {
   name: "CardHeader",
+  data() {
+    return {
+      isNewTab: this.tab.name === "",
+    };
+  },
   props: ["tab", "removeTab", "onUpdate"],
   methods: {
     onTabBlur(tab) {
-      if (!tab.name) {
+      if (!this.isNewTab && !this.$v.tab.name.required) {
+        this.onFocus();
+      } else if (!tab.name) {
         this.removeTab(tab.id);
       } else {
+        this.isNewTab = false;
         tab.focus = false;
       }
     },
@@ -62,6 +79,11 @@ export default {
     },
     nbTasks() {
       return this.tab.tasks.length;
+    },
+  },
+  validations: {
+    tab: {
+      name: { required },
     },
   },
   mounted() {
@@ -107,5 +129,22 @@ export default {
   border-radius: 0.25rem;
   padding: 2px 8px;
   font-weight: bold;
+  position: relative;
+  &:focus {
+    z-index: 2;
+  }
+  &[aria-invalid="true"] {
+    border-color: #dc3545;
+    outline-color: #dc3545;
+  }
+}
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #0000003b;
+  z-index: 1;
 }
 </style>

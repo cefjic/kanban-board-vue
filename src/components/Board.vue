@@ -15,7 +15,7 @@
               :onUpdate="saveLocalStorage"
             />
           </template>
-          <TabList :tab="tab" :onUpdate="saveLocalStorage" />
+          <TabList :tab="tab" />
           <b-card-body>
             <a href="#" class="card-link" @click="tab.addTask('')">
               <b-icon icon="plus" aria-hidden="true"></b-icon>
@@ -30,32 +30,13 @@
         }}</b-button>
       </div>
     </div>
-    <div class="debug">{{ listString }}</div>
   </div>
 </template>
 
 <script>
 import CardHeader from "./CardHeader";
 import TabList from "./TabList";
-import { LOCAL_STORAGE_TABS, Task, Tab } from "../utils";
-
-const getExistingTasks = (tasks) =>
-  tasks.map(({ name, id, desc }) => new Task({ name, id, desc }));
-
-const getExistingTabs = () => {
-  const existingTabs = localStorage.getItem(LOCAL_STORAGE_TABS);
-  const savedTabs = existingTabs ? JSON.parse(existingTabs) : [];
-  return savedTabs.map(
-    ({ name, tasks, order, id, isProtected }) =>
-      new Tab({
-        name,
-        order,
-        tasks: getExistingTasks(tasks),
-        isProtected,
-        id,
-      })
-  );
-};
+import { LOCAL_STORAGE_TABS, getExistingTabs, Tab } from "../utils";
 
 export default {
   name: "Board",
@@ -80,18 +61,12 @@ export default {
       return tab.tasks.length > 5;
     },
     saveLocalStorage() {
-      console.log("update local storage");
       localStorage.setItem(LOCAL_STORAGE_TABS, JSON.stringify(this.tabs));
     },
   },
   components: {
     CardHeader,
     TabList,
-  },
-  computed: {
-    listString() {
-      return JSON.stringify(this.tabs, null, 2);
-    },
   },
   updated() {
     this.saveLocalStorage();
@@ -135,28 +110,12 @@ export default {
     margin-right: 8px;
   }
 }
-.list-group {
-  flex: 1;
-  min-height: 40px;
-}
-.flip-list-move {
-  transition: transform 0.5s;
-}
 .sortable-chosen .card {
   background-color: #e0e0e0;
 }
-.card.text-white a {
-  color: white;
-}
-.task-wrapper {
-  & + & {
-    margin-top: 8px;
+.card.text-white {
+  .card-link {
+    color: white;
   }
-}
-.debug {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 </style>

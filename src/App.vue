@@ -5,10 +5,7 @@
 
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item-dropdown
-            v-bind:text="$t($i18n.locale.toUpperCase())"
-            right
-          >
+          <b-nav-item-dropdown v-bind:text="$i18n.locale.toUpperCase()" right>
             <b-dropdown-item href="#" @click="changeLanguage('en')">
               EN
             </b-dropdown-item>

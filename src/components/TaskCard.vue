@@ -1,11 +1,5 @@
 <template>
-  <b-card
-    class="task-card"
-    variant="primary"
-    header="Primary"
-    @click="showModal"
-    no-body
-  >
+  <b-card class="task-card" text-variant="dark" @click="showModal" no-body>
     <template v-slot:header>
       <form v-if="task.focus" @submit="onSubmit">
         <input
@@ -14,17 +8,19 @@
           ref="taskInput"
           class="custom-input"
         />
+        <div class="background"></div>
       </form>
       <b-card-text class="text-line" v-else>
         {{ task.name }}
       </b-card-text>
-      <b-modal :id="`task-${task.id}`" :ref="`ref-${task.id}`">
+      <b-modal :ref="`ref-${task.id}`" @hidden="hideModal">
         <template v-slot:modal-title>
           <form @submit="onSubmit">
             <b-input
-              v-model="task.name"
+              v-model="$v.task.name.$model"
               @blur="onTitleBlur(task)"
               id="title-modal-input"
+              :state="$v.task.name.required"
             />
           </form>
         </template>
@@ -52,10 +48,21 @@
 
 <script>
 import { onSubmitBlur } from "../utils";
+import { required } from "vuelidate/lib/validators";
 
 export default {
   name: "TaskCard",
-  props: ["tab", "task", "onUpdate"],
+  data() {
+    return { originTaskName: "" };
+  },
+  props: ["tab", "task"],
+  validations: {
+    task: {
+      name: {
+        required,
+      },
+    },
+  },
   methods: {
     onTaskBlur(tab, task) {
       if (!task.name) {
@@ -77,11 +84,15 @@ export default {
       }
     },
     showModal() {
+      this.originTaskName = this.task.name;
       if (!this.task.focus) {
         this.$refs[`ref-${this.task.id}`].show();
       }
     },
     hideModal() {
+      if (!this.$v.task.name.required) {
+        this.task.name = this.originTaskName;
+      }
       this.$refs[`ref-${this.task.id}`].hide();
     },
   },
@@ -90,7 +101,6 @@ export default {
   },
   updated() {
     this.onFocus();
-    this.onUpdate();
   },
 };
 </script>
@@ -125,6 +135,7 @@ export default {
   text-overflow: ellipsis;
   white-space: nowrap;
   display: block;
+  padding: 4px 10px;
 }
 .modal-title {
   width: 100%;

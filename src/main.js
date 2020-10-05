@@ -6,10 +6,12 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 import VueI18n from "vue-i18n";
 import FR_COMMON from "./locales/fr/common.json";
 import EN_COMMON from "./locales/en/common.json";
+import Vuelidate from "vuelidate";
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVueIcons);
 Vue.use(BootstrapVue);
+Vue.use(Vuelidate);
 Vue.use(VueI18n);
 
 export const messages = {
