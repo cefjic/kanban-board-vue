@@ -45,7 +45,7 @@
             >
               {{ $t("delete") }}
             </b-button>
-            <b-button variant="primary" size="sm" @click="hideModal">
+            <b-button variant="primary" size="sm" @click="isModalOpen = false">
               {{ $t("close") }}
             </b-button>
           </div>
@@ -67,7 +67,7 @@ export default {
       originTaskName: "",
     };
   },
-  props: ["tab", "task"],
+  props: ["tab", "task", "onUpdate"],
   validations: {
     task: {
       name: {
@@ -108,6 +108,7 @@ export default {
     this.onFocus();
   },
   updated() {
+    this.onUpdate();
     this.onFocus();
   },
 };

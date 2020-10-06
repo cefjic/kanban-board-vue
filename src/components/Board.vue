@@ -15,7 +15,7 @@
               :onUpdate="saveLocalStorage"
             />
           </template>
-          <TabList :tab="tab" />
+          <TabList :tab="tab" :onUpdate="saveLocalStorage" />
           <b-card-body>
             <a href="#" class="card-link" @click="tab.addTask('')">
               <b-icon icon="plus" aria-hidden="true"></b-icon>
@@ -70,6 +70,11 @@ export default {
   },
   updated() {
     this.saveLocalStorage();
+  },
+  watch: {
+    tabs() {
+      console.log("a");
+    },
   },
 };
 </script>

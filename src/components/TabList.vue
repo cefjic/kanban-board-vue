@@ -6,7 +6,7 @@
     v-bind="dragOptions"
   >
     <div v-for="task in tab.tasks" :key="task.id" class="task-wrapper">
-      <TaskCard :tab="tab" :task="task" />
+      <TaskCard :tab="tab" :task="task" :onUpdate="onUpdate" />
     </div>
   </draggable>
 </template>
@@ -17,7 +17,7 @@ import TaskCard from "./TaskCard";
 
 export default {
   name: "TabList",
-  props: ["tab"],
+  props: ["tab", "onUpdate"],
   components: {
     draggable,
     TaskCard,
