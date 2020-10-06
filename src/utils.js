@@ -1,6 +1,7 @@
 import uniqid from "uniqid";
 
 export const LOCAL_STORAGE_TABS = "tabs";
+export const LOCAL_STORAGE_LANGUAGE = "localeKey";
 
 export const onSubmitBlur = (e) => {
   e.preventDefault();
@@ -39,7 +40,7 @@ export function Tab({
   };
 }
 
-const getExistingTasks = (tasks) =>
+const getExistingTasks = (tasks = []) =>
   tasks
     .map(({ name, id, desc }) => new Task({ name, id, desc }))
     .filter(({ name }) => !!name);

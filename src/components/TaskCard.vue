@@ -25,7 +25,7 @@
               v-model="$v.task.name.$model"
               @blur="onTitleBlur(task)"
               id="title-modal-input"
-              :state="$v.task.name.required"
+              :state="!isNameRequired"
               :placeholder="$t('name')"
             />
           </form>
@@ -42,6 +42,7 @@
               variant="danger"
               size="sm"
               @click="tab.removeTask(task.id)"
+              :disabled="tab.isProtected"
             >
               {{ $t("delete") }}
             </b-button>
@@ -77,7 +78,7 @@ export default {
   },
   methods: {
     onTaskBlur(tab, task) {
-      if (!task.name) {
+      if (this.isNameRequired) {
         tab.removeTask(task.id);
       } else {
         task.focus = false;
@@ -99,7 +100,7 @@ export default {
       this.originTaskName = this.task.name;
     },
     hideModal() {
-      if (!this.$v.task.name.required) {
+      if (this.isNameRequired) {
         this.task.name = this.originTaskName;
       }
     },
@@ -109,6 +110,11 @@ export default {
   },
   updated() {
     this.onUpdate();
+  },
+  computed: {
+    isNameRequired() {
+      return !this.$v.task.name.required;
+    },
   },
 };
 </script>

@@ -7,6 +7,7 @@ import VueI18n from "vue-i18n";
 import FR_COMMON from "./locales/fr/common.json";
 import EN_COMMON from "./locales/en/common.json";
 import Vuelidate from "vuelidate";
+import { LOCAL_STORAGE_LANGUAGE } from "./utils";
 
 Vue.config.productionTip = false;
 Vue.use(BootstrapVueIcons);
@@ -20,7 +21,7 @@ export const messages = {
 };
 
 export const i18n = new VueI18n({
-  locale: localStorage.getItem("localeKey") || "fr",
+  locale: localStorage.getItem(LOCAL_STORAGE_LANGUAGE) || "fr",
   messages,
 });
 

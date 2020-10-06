@@ -24,6 +24,7 @@
 import SomeIcon from "./assets/logo.svg";
 import Board from "./components/Board";
 import { i18n, messages } from "./main";
+import { LOCAL_STORAGE_LANGUAGE } from "./utils";
 import { required, minLength } from "vuelidate/lib/validators";
 
 export default {
@@ -31,7 +32,7 @@ export default {
   components: { SomeIcon, Board },
   methods: {
     changeLanguage(key) {
-      localStorage.setItem("localeKey", key);
+      localStorage.setItem(LOCAL_STORAGE_LANGUAGE, key);
       i18n.locale = Object.keys(messages).includes(key) ? key : "fr";
     },
     updateTitle() {

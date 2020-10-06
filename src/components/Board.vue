@@ -57,8 +57,8 @@ export default {
       });
       this.tabs = [...this.tabs, newTab];
     },
-    isOverflowed(tab) {
-      return tab.tasks.length > 5;
+    isOverflowed({ tasks = [] }) {
+      return tasks.length > 5;
     },
     saveLocalStorage() {
       localStorage.setItem(LOCAL_STORAGE_TABS, JSON.stringify(this.tabs));

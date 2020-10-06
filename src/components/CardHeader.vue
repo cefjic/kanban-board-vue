@@ -2,10 +2,10 @@
   <form v-if="tab.focus" @submit="onSubmit">
     <input
       v-model="$v.tab.name.$model"
-      @blur="onTabBlur(tab)"
+      @blur="onTabBlur()"
       ref="tabInput"
       class="custom-input"
-      :aria-invalid="!this.isNewTab && !$v.tab.name.required"
+      :aria-invalid="isNameRequired"
     />
     <div class="background"></div>
   </form>
@@ -30,12 +30,15 @@
       <b-dropdown-item @click="tab.isProtected = !tab.isProtected">{{
         $t(tab.isProtected ? "unprotect" : "protect")
       }}</b-dropdown-item>
-      <b-dropdown-item @click="removeTab(tab.id)">{{
+      <b-dropdown-item @click="removeTab(tab.id)" :disabled="tab.isProtected">{{
         $t("delete")
       }}</b-dropdown-item>
-      <b-dropdown-item v-if="nbTasks > 0" @click="tab.clean()">{{
-        $t("clean")
-      }}</b-dropdown-item>
+      <b-dropdown-item
+        v-if="nbTasks > 0"
+        @click="tab.clean()"
+        :disabled="tab.isProtected"
+        >{{ $t("clean") }}</b-dropdown-item
+      >
     </b-dropdown>
   </div>
 </template>
@@ -48,19 +51,19 @@ export default {
   name: "CardHeader",
   data() {
     return {
-      isNewTab: this.tab.name === "",
+      isNewTab: !this.tab.name,
     };
   },
   props: ["tab", "removeTab", "onUpdate"],
   methods: {
-    onTabBlur(tab) {
-      if (!this.isNewTab && !this.$v.tab.name.required) {
+    onTabBlur() {
+      if (this.isNameRequired) {
         this.onFocus();
-      } else if (!tab.name) {
-        this.removeTab(tab.id);
+      } else if (!this.tab.name) {
+        this.removeTab(this.tab.id);
       } else {
         this.isNewTab = false;
-        tab.focus = false;
+        this.tab.focus = false;
       }
     },
     onFocus() {
@@ -79,6 +82,9 @@ export default {
     },
     nbTasks() {
       return this.tab.tasks.length;
+    },
+    isNameRequired() {
+      return !this.isNewTab && !this.$v.tab.name.required;
     },
   },
   validations: {
