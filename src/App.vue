@@ -31,6 +31,7 @@ export default {
   components: { SomeIcon, Board },
   methods: {
     changeLanguage(key) {
+      localStorage.setItem("localeKey", key);
       i18n.locale = Object.keys(messages).includes(key) ? key : "fr";
     },
     updateTitle() {

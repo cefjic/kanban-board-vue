@@ -71,11 +71,6 @@ export default {
   updated() {
     this.saveLocalStorage();
   },
-  watch: {
-    tabs() {
-      console.log("a");
-    },
-  },
 };
 </script>
 

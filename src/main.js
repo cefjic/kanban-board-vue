@@ -20,7 +20,7 @@ export const messages = {
 };
 
 export const i18n = new VueI18n({
-  locale: "fr",
+  locale: localStorage.getItem("localeKey") || "fr",
   messages,
 });
 

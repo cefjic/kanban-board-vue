@@ -90,8 +90,8 @@ export default {
     this.onFocus();
   },
   updated() {
-    this.onFocus();
     this.onUpdate();
+    this.onFocus();
   },
 };
 </script>

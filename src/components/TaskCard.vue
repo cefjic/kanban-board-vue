@@ -109,7 +109,6 @@ export default {
   },
   updated() {
     this.onUpdate();
-    this.onFocus();
   },
 };
 </script>
