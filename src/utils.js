@@ -17,14 +17,12 @@ export function Task({ name, focus = false, id = uniqid(), desc = "" }) {
 
 export function Tab({
   name,
-  order,
   tasks = [],
   focus = false,
   id = uniqid(),
   isProtected = false,
 }) {
   this.name = name;
-  this.order = order;
   this.tasks = tasks;
   this.id = id;
   this.focus = focus;
@@ -40,24 +38,27 @@ export function Tab({
   };
 }
 
-const getExistingTasks = (tasks = []) =>
+export const getExistingTasks = (tasks = []) =>
   tasks
     .map(({ name, id, desc }) => new Task({ name, id, desc }))
     .filter(({ name }) => !!name);
 
 export const getExistingTabs = () => {
-  const existingTabs = localStorage.getItem(LOCAL_STORAGE_TABS);
-  const savedTabs = existingTabs ? JSON.parse(existingTabs) : [];
-  return savedTabs
-    .map(
-      ({ name, tasks, order, id, isProtected }) =>
-        new Tab({
-          name,
-          order,
-          tasks: getExistingTasks(tasks),
-          isProtected,
-          id,
-        })
-    )
-    .filter(({ name }) => !!name);
+  try {
+    const existingTabs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TABS));
+    const savedTabs = existingTabs ? existingTabs : [];
+    return savedTabs
+      .map(
+        ({ name, tasks, id, isProtected }) =>
+          new Tab({
+            name,
+            tasks: getExistingTasks(tasks),
+            isProtected,
+            id,
+          })
+      )
+      .filter(({ name }) => !!name);
+  } catch (e) {
+    return [];
+  }
 };

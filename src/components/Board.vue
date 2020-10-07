@@ -52,7 +52,6 @@ export default {
     addTab() {
       const newTab = new Tab({
         name: "",
-        order: this.tabs.length,
         focus: true,
       });
       this.tabs = [...this.tabs, newTab];
