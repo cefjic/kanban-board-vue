@@ -1,17 +1,23 @@
 module.exports = {
   root: true,
-  parser: "babel-eslint",
   parserOptions: {
-    sourceType: "module",
+    parser: 'babel-eslint',
+    ecmaVersion: 6
   },
   env: {
+    node: true,
     browser: true,
+    jest: true
   },
-  extends: "standard",
-  plugins: ["html"],
+  extends: [
+    'standard',
+    'eslint:recommended',
+    'plugin:vue/essential',
+    'prettier/vue'
+  ],
   rules: {
-    "arrow-parens": 0,
-    "generator-star-spacing": 0,
-    "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0,
-  },
+    semi: 'off',
+    'space-before-function-paren': 'off',
+    'vue/no-mutating-props': 'off'
+  }
 };

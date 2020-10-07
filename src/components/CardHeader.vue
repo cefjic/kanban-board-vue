@@ -33,37 +33,37 @@
         <b-icon icon="three-dots" aria-hidden="true"></b-icon>
       </template>
       <b-dropdown-item @click="tab.isProtected = !tab.isProtected">{{
-        $t(tab.isProtected ? "unprotect" : "protect")
+        $t(tab.isProtected ? 'unprotect' : 'protect')
       }}</b-dropdown-item>
       <b-dropdown-item
         @click="removeTab(tab.id)"
         :disabled="tab.isProtected"
         data-test="remove-item"
       >
-        {{ $t("delete") }}
+        {{ $t('delete') }}
       </b-dropdown-item>
       <b-dropdown-item
         v-if="nbTasks > 0"
         @click="tab.clean()"
         :disabled="tab.isProtected"
-        >{{ $t("clean") }}</b-dropdown-item
+        >{{ $t('clean') }}</b-dropdown-item
       >
     </b-dropdown>
   </div>
 </template>
 
 <script>
-import { onSubmitBlur } from "../utils";
-import { required } from "vuelidate/lib/validators";
+import { onSubmitBlur } from '../utils';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
-  name: "CardHeader",
+  name: 'CardHeader',
   data() {
     return {
-      isNewTab: !this.tab.name,
+      isNewTab: !this.tab.name
     };
   },
-  props: ["tab", "removeTab", "onUpdate"],
+  props: ['tab', 'removeTab', 'onUpdate'],
   methods: {
     onTabBlur() {
       if (this.isNameRequired) {
@@ -83,7 +83,7 @@ export default {
     },
     onSubmit(e) {
       onSubmitBlur(e);
-    },
+    }
   },
   computed: {
     isOverflowed() {
@@ -94,12 +94,12 @@ export default {
     },
     isNameRequired() {
       return !this.isNewTab && !this.$v.tab.name.required;
-    },
+    }
   },
   validations: {
     tab: {
-      name: { required },
-    },
+      name: { required }
+    }
   },
   mounted() {
     this.onFocus();
@@ -107,7 +107,7 @@ export default {
   updated() {
     this.onUpdate();
     this.onFocus();
-  },
+  }
 };
 </script>
 
@@ -148,7 +148,7 @@ export default {
   &:focus {
     z-index: 2;
   }
-  &[aria-invalid="true"] {
+  &[aria-invalid='true'] {
     border-color: #dc3545;
     outline-color: #dc3545;
   }

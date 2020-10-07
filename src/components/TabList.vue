@@ -12,26 +12,26 @@
 </template>
 
 <script>
-import draggable from "vuedraggable";
-import TaskCard from "./TaskCard";
+import draggable from 'vuedraggable';
+import TaskCard from './TaskCard';
 
 export default {
-  name: "TabList",
-  props: ["tab", "onUpdate"],
+  name: 'TabList',
+  props: ['tab', 'onUpdate'],
   components: {
     draggable,
-    TaskCard,
+    TaskCard
   },
   computed: {
     dragOptions() {
       return {
         animation: 0,
-        group: "description",
+        group: 'description',
         disabled: this.tab.isProtected,
-        ghostClass: "ghost",
+        ghostClass: 'ghost'
       };
-    },
-  },
+    }
+  }
 };
 </script>
 

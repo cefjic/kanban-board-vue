@@ -44,10 +44,10 @@
               @click="tab.removeTask(task.id)"
               :disabled="tab.isProtected"
             >
-              {{ $t("delete") }}
+              {{ $t('delete') }}
             </b-button>
             <b-button variant="primary" size="sm" @click="isModalOpen = false">
-              {{ $t("close") }}
+              {{ $t('close') }}
             </b-button>
           </div>
         </template>
@@ -57,24 +57,24 @@
 </template>
 
 <script>
-import { onSubmitBlur } from "../utils";
-import { required } from "vuelidate/lib/validators";
+import { onSubmitBlur } from '../utils';
+import { required } from 'vuelidate/lib/validators';
 
 export default {
-  name: "TaskCard",
+  name: 'TaskCard',
   data() {
     return {
       isModalOpen: false,
-      originTaskName: "",
+      originTaskName: ''
     };
   },
-  props: ["tab", "task", "onUpdate"],
+  props: ['tab', 'task', 'onUpdate'],
   validations: {
     task: {
       name: {
-        required,
-      },
-    },
+        required
+      }
+    }
   },
   methods: {
     onTaskBlur(tab, task) {
@@ -103,7 +103,7 @@ export default {
       if (this.isNameRequired) {
         this.task.name = this.originTaskName;
       }
-    },
+    }
   },
   mounted() {
     this.onFocus();
@@ -114,8 +114,8 @@ export default {
   computed: {
     isNameRequired() {
       return !this.$v.task.name.required;
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -21,3 +21,16 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+coverage
+coverage/*
+coverage/clover.xml
+coverage/lcov-report/index.html
+coverage/lcov-report/src/index.html
+coverage/lcov-report/src/utils.js.html
+coverage/lcov-report/src/components/Board.vue.html
+coverage/lcov-report/src/components/CardHeader.vue.html
+coverage/lcov-report/src/components/index.html
+coverage/lcov-report/src/components/TabList.vue.html
+coverage/lcov-report/src/components/TaskCard.vue.html
+coverage/lcov-report/src/tests/index.html
+coverage/lcov-report/src/tests/mount.js.html

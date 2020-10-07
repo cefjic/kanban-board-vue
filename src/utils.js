@@ -1,14 +1,14 @@
-import uniqid from "uniqid";
+import uniqid from 'uniqid';
 
-export const LOCAL_STORAGE_TABS = "tabs";
-export const LOCAL_STORAGE_LANGUAGE = "localeKey";
+export const LOCAL_STORAGE_TABS = 'tabs';
+export const LOCAL_STORAGE_LANGUAGE = 'localeKey';
 
-export const onSubmitBlur = (e) => {
+export const onSubmitBlur = e => {
   e.preventDefault();
   document.activeElement.blur();
 };
 
-export function Task({ name, focus = false, id = uniqid(), desc = "" }) {
+export function Task({ name, focus = false, id = uniqid(), desc = '' }) {
   this.name = name;
   this.focus = focus;
   this.id = id;
@@ -20,18 +20,18 @@ export function Tab({
   tasks = [],
   focus = false,
   id = uniqid(),
-  isProtected = false,
+  isProtected = false
 }) {
   this.name = name;
   this.tasks = tasks;
   this.id = id;
   this.focus = focus;
   this.isProtected = isProtected;
-  this.addTask = (taskName) => {
+  this.addTask = taskName => {
     this.tasks = [...this.tasks, new Task({ name: taskName, focus: true })];
   };
-  this.removeTask = (taskId) => {
-    this.tasks = this.tasks.filter((task) => task.id !== taskId);
+  this.removeTask = taskId => {
+    this.tasks = this.tasks.filter(task => task.id !== taskId);
   };
   this.clean = () => {
     this.tasks = [];
@@ -46,7 +46,7 @@ export const getExistingTasks = (tasks = []) =>
 export const getExistingTabs = () => {
   try {
     const existingTabs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_TABS));
-    const savedTabs = existingTabs ? existingTabs : [];
+    const savedTabs = existingTabs || [];
     return savedTabs
       .map(
         ({ name, tasks, id, isProtected }) =>
@@ -54,7 +54,7 @@ export const getExistingTabs = () => {
             name,
             tasks: getExistingTasks(tasks),
             isProtected,
-            id,
+            id
           })
       )
       .filter(({ name }) => !!name);

@@ -19,14 +19,14 @@
           <b-card-body>
             <a href="#" class="card-link" @click="tab.addTask('')">
               <b-icon icon="plus" aria-hidden="true"></b-icon>
-              {{ $tc("addTask", tab.tasks.length + 1) }}
+              {{ $tc('addTask', tab.tasks.length + 1) }}
             </a>
           </b-card-body>
         </b-card>
       </div>
       <div class="list-wrapper">
         <b-button class="w-100" variant="light" @click="addTab">{{
-          $tc("addTab", tabs.length + 1)
+          $tc('addTab', tabs.length + 1)
         }}</b-button>
       </div>
     </div>
@@ -34,25 +34,25 @@
 </template>
 
 <script>
-import CardHeader from "./CardHeader";
-import TabList from "./TabList";
-import { LOCAL_STORAGE_TABS, getExistingTabs, Tab } from "../utils";
+import CardHeader from './CardHeader';
+import TabList from './TabList';
+import { LOCAL_STORAGE_TABS, getExistingTabs, Tab } from '../utils';
 
 export default {
-  name: "Board",
+  name: 'Board',
   data() {
     return {
-      tabs: getExistingTabs(),
+      tabs: getExistingTabs()
     };
   },
   methods: {
     removeTab(id) {
-      this.tabs = this.tabs.filter((tab) => tab.id !== id);
+      this.tabs = this.tabs.filter(tab => tab.id !== id);
     },
     addTab() {
       const newTab = new Tab({
-        name: "",
-        focus: true,
+        name: '',
+        focus: true
       });
       this.tabs = [...this.tabs, newTab];
     },
@@ -61,15 +61,15 @@ export default {
     },
     saveLocalStorage() {
       localStorage.setItem(LOCAL_STORAGE_TABS, JSON.stringify(this.tabs));
-    },
+    }
   },
   components: {
     CardHeader,
-    TabList,
+    TabList
   },
   updated() {
     this.saveLocalStorage();
-  },
+  }
 };
 </script>
 
