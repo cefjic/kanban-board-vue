@@ -1,6 +1,6 @@
 # kanban board
 
-Technical test by Arthur for Lulu dans ma rue
+Simple Kanban board app builded with VueJS.
 
 ## Features
 
