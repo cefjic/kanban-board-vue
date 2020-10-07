@@ -128,6 +128,11 @@ describe("getExistingTabs function", () => {
   });
 
   it("should return empty Tab array", () => {
+    localStorage.setItem(LOCAL_STORAGE_TABS, "[]");
+    expect(getExistingTabs()).toEqual([]);
+  });
+
+  it("should return empty Tab array", () => {
     localStorage.setItem(LOCAL_STORAGE_TABS, "test");
     expect(getExistingTabs()).toEqual([]);
   });
@@ -145,7 +150,7 @@ describe("getExistingTabs function", () => {
     expect(getExistingTabs()).toHaveLength(3);
   });
 
-  it("should return 3 default Tabs array", () => {
+  it("should return 3 custom Tabs array", () => {
     localStorage.setItem(
       LOCAL_STORAGE_TABS,
       JSON.stringify([

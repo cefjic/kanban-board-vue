@@ -13,15 +13,20 @@
     <span class="tab-title" @click="tab.focus = true" :title="tab.name">
       {{ tab.name }}
     </span>
-    <b-badge :variant="isOverflowed ? 'danger' : 'secondary'"
-      >{{ nbTasks }}/5</b-badge
+    <b-badge
+      :variant="isOverflowed ? 'danger' : 'secondary'"
+      data-test="nb-tasks"
     >
-    <span v-b-tooltip.hover :title="$t('protected')" class="ml-1">
-      <b-icon
-        icon="lock-fill"
-        v-if="tab.isProtected"
-        aria-hidden="true"
-      ></b-icon>
+      {{ nbTasks }}/5
+    </b-badge>
+    <span
+      v-b-tooltip.hover
+      :title="$t('protected')"
+      v-if="tab.isProtected"
+      class="ml-1"
+      data-test="task-protected"
+    >
+      <b-icon icon="lock-fill" aria-hidden="true"></b-icon>
     </span>
     <b-dropdown size="sm" variant="light">
       <template v-slot:button-content>
@@ -30,9 +35,13 @@
       <b-dropdown-item @click="tab.isProtected = !tab.isProtected">{{
         $t(tab.isProtected ? "unprotect" : "protect")
       }}</b-dropdown-item>
-      <b-dropdown-item @click="removeTab(tab.id)" :disabled="tab.isProtected">{{
-        $t("delete")
-      }}</b-dropdown-item>
+      <b-dropdown-item
+        @click="removeTab(tab.id)"
+        :disabled="tab.isProtected"
+        data-test="remove-item"
+      >
+        {{ $t("delete") }}
+      </b-dropdown-item>
       <b-dropdown-item
         v-if="nbTasks > 0"
         @click="tab.clean()"
